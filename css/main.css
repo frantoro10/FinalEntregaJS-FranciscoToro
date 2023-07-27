@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+
+/* Aplicando CSS */
+
+/* Navbar */
+
+.navbar {
+    background-color: rgb(142, 135, 135);
+}
+#buscador {
+    width: 100%;
+    
+}
+.navbar-nav {
+    width: 80%;
+   
+}
+.navbar-nav form {
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.darkMode {
+    color: white;
+    background-color: black;
+}
