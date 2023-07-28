@@ -50,3 +50,15 @@ if (localStorage.getItem("allProductos")) {
     allProductos.push(productoVideo1, productoVideo2, productoVideo3, productoVideo4, productoVideo5, productoVideo6, productoProcesador1, productoProcesador2, productoProcesador3, memoriaRam1, memoriaRam2, memoriaRam3)
     localStorage.setItem("allProductos", JSON.stringify(allProductos))
 }
+
+// localStorage productosCarrito
+let productosCarrito
+
+if (localStorage.getItem("carrito")) {
+    //cuando ya existe algo en el storage con la clave carrito
+    productosCarrito = JSON.parse(localStorage.getItem("carrito"))
+} else {
+    //no existe nada en el storage
+    productosCarrito = []
+    localStorage.setItem("carrito", productosCarrito)
+}

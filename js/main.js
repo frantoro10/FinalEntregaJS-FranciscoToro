@@ -1,19 +1,51 @@
 // E-Commerce Productos PC
 
-// Capuramos DOM:
+//simulacion de peticion:
+const BD = [
+    {id: 1, nombre: 'Producto 1', precio: 1500},
+    {id: 2, nombre: 'Producto 2', precio: 2500},
+    {id: 3, nombre: 'Producto 3', precio: 3500},
+    {id: 4, nombre: 'Producto 4', precio: 3500},
+ ]
+ 
+ const pedirProductos = () => {
+    return new Promise( (res, rej) => {
+        setTimeout(() => {
+            res(BD)
+        }, 3000)
+    })
+ }
+ 
+ pedirProductos()
+ .then((rta) => {
+         let productos = rta
+         console.log(productos)
+         //render
+     })
+ .finally(()=>{
+    console.log(`Termino la carga de la base de datos`)
+ } )
+
+// End simulacion de pedidos
 
 // Fecha
 const DateTime = luxon.DateTime
-const timeAhora = DateTime.now()
 let fecha = document.getElementById("fecha")
-let fechaMostrar = timeAhora.toLocaleString("DATE_MED_WITH_WEEKDAY")
-fecha.innerHTML = `${fechaMostrar}`
+setInterval(()=>{
+   let fechaMostrar =  DateTime.now().toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+   fecha.innerHTML = `${fechaMostrar}`
 
+},1000)
+
+// Capuramos DOM:
 
 // Catalogo
 let componentesDiv = document.getElementById("componentes")
-let showCatalogo = document.getElementById("verCatalogo")
-let hideCatalogo = document.getElementById("ocultarCatalogo")
+// let showCatalogo = document.getElementById("verCatalogo")
+// let hideCatalogo = document.getElementById("ocultarCatalogo")
+// Loader
+let loader = document.getElementById("loader")
+let loaderTexto = document.getElementById("loaderTexto")
 // Select Orden (Filtro Mayor Menor Etc)
 let selectOrden = document.getElementById("selectOrden")
 // Agregar componente
@@ -34,16 +66,6 @@ let modalBodyCarrito = document.getElementById("modal-bodyCarrito")
 let botoNCarrito = document.getElementById("botonCarrito")
 let precioTotal = document.getElementById("precioTotal")
 
-let productosCarrito
-// localStorage productosCarrito
-if (localStorage.getItem("carrito")) {
-    //cuando ya existe algo en el storage con la clave carrito
-    productosCarrito = JSON.parse(localStorage.getItem("carrito"))
- } else {
-    //no existe nada en el storage
-    productosCarrito = []
-    localStorage.setItem("carrito", productosCarrito)
- }
 
 // Funciones del Proyecto: | (Hoisting) 
 
@@ -91,10 +113,19 @@ function busqueda3I(array) {
         return tipoCoincide && versionCoincide && precioCoincide;
     });
     if (busquedaFiltro.length === 0) {
-        alert("Nada para mostrar");
+          // Alert
+          Swal.fire({
+            icon: "error",
+            title: `No hay coincidencias`,
+            confirmButtonColor: "blue",
+            confirmButtonText: "Ok",
+            imageHeight: 300,
+            timer: 2500
+        })
     }
     else {
         mostrarCatalogo(busquedaFiltro);
+        
     }
 }
 
@@ -140,7 +171,7 @@ function mostrarCatalogo(array) {
         let newComponenteDiv = document.createElement("div")
         newComponenteDiv.className = "col-12 col-md-6 col-lg-4"
         newComponenteDiv.innerHTML = `<div id="${componentes.id}" style="width: 18rem;">
-                                    <img src="${componentes.img}" class="card-img-top" alt="${componentes.version}">
+                                    <img src="${componentes.img}" class="card-img-top img-card" alt="${componentes.version}">
                                         <div class="card-body">
                                              <h4 class="card-title">${componentes.tipo}</h4>
                                                 <p>Version: ${componentes.version}</p>
@@ -194,8 +225,8 @@ function agregarAlCarrito(componentes) {
 function cargarProductosCarrito(array) {
     modalBodyCarrito.innerHTML = ``;
     array.forEach((productoCarritoo) => {
-        modalBodyCarrito.innerHTML += `<div class="card border-primary mb-3" id ="productoCarrito${productoCarritoo.id}" style="max-width: 540px;">
-        <img class="card-img-top" height="300px" src="${productoCarritoo.img}" alt="">
+        modalBodyCarrito.innerHTML += `<div class="card border-primary mb-3 cardCarrito" id ="productoCarrito${productoCarritoo.id}" style="max-width: 540px;">
+        <img class="card-img-top carrito-img" src="${productoCarritoo.img}" alt="">
         <div class="card-body">
                <h4 class="card-title">${productoCarritoo.tipo}</h4>
                <p class="card-text">${productoCarritoo.version}</p>
@@ -205,7 +236,30 @@ function cargarProductosCarrito(array) {
    </div>`
     })
     calcularTotal(array)
+
+    array.forEach((productoCarritoo) => {
+        // Eliminamos del DOM
+        document.getElementById(`botonEliminar${productoCarritoo.id}`).addEventListener("click", () => {
+            console.log(`Producto Eliminado`)
+            let cardProducto = document.getElementById(`productoCarrito${productoCarritoo.id}`)
+            cardProducto.remove()
+            // Borramos del array
+            // Se busca el objeto a eliminar
+            let productoEliminar = array.find((componente) => componente.id == productoCarritoo.id)
+            console.log (productoEliminar)
+            // Buscar indice
+            let posicion = array.indexOf(productoEliminar)
+            // Eliminamos del array con splice
+            array.splice(posicion,1) 
+            console.log(array)
+            // Eliminar LocalStorage
+            localStorage.setItem("carrito", JSON.stringify(array))
+            calcularTotal(array)
+        })
+    })
 }
+
+// Calcular total funcion
 
 function calcularTotal(array) {
     let total = array.reduce((acc, productoCarritoo) => acc + productoCarritoo.precio, 0)
@@ -229,9 +283,12 @@ agregarComponenteBtn.addEventListener("click", function (event) {
 // Boton de filtrar
 filtrarComponente.addEventListener("click", () => { busqueda3I(allProductos) })
 //  Mostrar Catalogo
-showCatalogo.addEventListener("click", () => { mostrarCatalogo(allProductos) })
+
+// showCatalogo.addEventListener("click", () => { mostrarCatalogo(allProductos) })
 // Ocultar catalogo
-hideCatalogo.addEventListener("click", () => { componentesDiv.innerHTML = `` })
+
+// hideCatalogo.addEventListener("click", () => { componentesDiv.innerHTML = `` })
+
 // Agregamos interactividad al select y sus opciones (menor mayor) etc
 selectOrden.addEventListener("change", () => {
     switch (selectOrden.value) {
@@ -251,9 +308,15 @@ selectOrden.addEventListener("change", () => {
 })
 // Carrito de compra
 botonCarrito.addEventListener("click", () => {
-    cargarProductosCarrito(productosCarrito)})
+    cargarProductosCarrito(productosCarrito)
+})
 
-
+// Time out - Intervalos
+setTimeout(() => {
+    loaderTexto.remove()
+    loader.remove()
+    mostrarCatalogo(allProductos)
+},2000)
 
 
 
