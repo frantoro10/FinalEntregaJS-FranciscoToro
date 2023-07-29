@@ -1,30 +1,30 @@
 // E-Commerce Productos PC
 
 //simulacion de peticion:
-const BD = [
-    {id: 1, nombre: 'Producto 1', precio: 1500},
-    {id: 2, nombre: 'Producto 2', precio: 2500},
-    {id: 3, nombre: 'Producto 3', precio: 3500},
-    {id: 4, nombre: 'Producto 4', precio: 3500},
- ]
+// const BD = [
+//     {id: 1, nombre: 'Producto 1', precio: 1500},
+//     {id: 2, nombre: 'Producto 2', precio: 2500},
+//     {id: 3, nombre: 'Producto 3', precio: 3500},
+//     {id: 4, nombre: 'Producto 4', precio: 3500},
+//  ]
  
- const pedirProductos = () => {
-    return new Promise( (res, rej) => {
-        setTimeout(() => {
-            res(BD)
-        }, 3000)
-    })
- }
+//  const pedirProductos = () => {
+//     return new Promise( (res, rej) => {
+//         setTimeout(() => {
+//             res(BD)
+//         }, 3000)
+//     })
+//  }
  
- pedirProductos()
- .then((rta) => {
-         let productos = rta
-         console.log(productos)
-         //render
-     })
- .finally(()=>{
-    console.log(`Termino la carga de la base de datos`)
- } )
+//  pedirProductos()
+//  .then((rta) => {
+//          let productos = rta
+//          console.log(productos)
+//          //render
+//      })
+//  .finally(()=>{
+//     console.log(`Termino la carga de la base de datos`)
+//  } )
 
 // End simulacion de pedidos
 
@@ -65,6 +65,8 @@ let coincidencia = document.getElementById("coincidencia")
 let modalBodyCarrito = document.getElementById("modal-bodyCarrito")
 let botoNCarrito = document.getElementById("botonCarrito")
 let precioTotal = document.getElementById("precioTotal")
+let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+
 
 
 // Funciones del Proyecto: | (Hoisting) 
@@ -82,7 +84,7 @@ function buscadorNav(buscado, array) {
 
 // Agregar componente Funcion
 function agregarComponente(array) {
-    const componenteNuevo = new ProductoStock(array.length + 1, tipoIngresado.value, versionIngresado.value, precioIngresado.value, "img/componentes.webp")
+    const componenteNuevo = new ProductoStock(array.length + 1, tipoIngresado.value, versionIngresado.value, parseInt(precioIngresado.value), "img/componentes.webp")
     array.push(componenteNuevo)
     // Setear en el storage el array con el componente 
     localStorage.setItem("allProductos", JSON.stringify(array))
@@ -264,6 +266,45 @@ function cargarProductosCarrito(array) {
 function calcularTotal(array) {
     let total = array.reduce((acc, productoCarritoo) => acc + productoCarritoo.precio, 0)
     total == 0 ? precioTotal.innerHTML = `No hay productos en el carro de compras` : precioTotal.innerHTML = `El total es <strong>${total}</strong>`
+    return total
+
+}
+
+// Boton finalizar compra funcion
+
+function finalizarCompra(array) {
+    Swal.fire ({
+        title: `¿Esta seguro de finalizar la compra?`,
+        icon: `info`,
+        showCancelButton: true,
+        confirmButtonText: `Estoy seguro`,
+        cancelButtonText: `No, quiero regresar`,
+        confirmButtonColor: `green`,
+        cancelButtonColor: `red`,
+    }).then((result)=> {
+        // isConfirmed esta referido al Sweet Alert (confirmbutton) [Nota para mi xD]
+        if(result.isConfirmed){
+            let totalFinal = calcularTotal(array)
+            // DOM
+            Swal.fire({
+                title: `Compra realizada con exito`,
+                icon: `success`,
+                confirmButtonColor: `green`,
+                text: `Recibimos tu pedido! Muchas gracias por confiar en nosotros. Precio Final: ${totalFinal}`
+            })
+            // Resetiamos y array - storage
+            productosCarrito = []
+            localStorage.removeItem("allProductos")
+        }else {
+            Swal.fire ({
+                title: `Compra no realiza`,
+                icon: `info`,
+                text: `La compra no fue realiza. Sus productos aun se encuentran en el carrito`,
+                confirmButtonColor: `green`,
+                timer: 3000
+            })
+        } 
+    })
 
 }
 
@@ -310,8 +351,12 @@ selectOrden.addEventListener("change", () => {
 botonCarrito.addEventListener("click", () => {
     cargarProductosCarrito(productosCarrito)
 })
+// Finalizar compra boton (evento)
+botonFinalizarCompra.addEventListener("click", () => {
+    finalizarCompra(productosCarrito)
+})
 
-// Time out - Intervalos
+// Time out - Intervalos LOADER PRODUCTOS
 setTimeout(() => {
     loaderTexto.remove()
     loader.remove()

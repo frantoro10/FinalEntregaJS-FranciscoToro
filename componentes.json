@@ -1,0 +1,86 @@
+[
+    {
+        "id": 1,
+        "tipo": "Placa de video",
+        "version": "Nvidia 3060 Ti",
+        "precio": 160000,
+        "img": "img/nvidia-3060.webp"
+    },
+    {
+        "id": 2,
+        "tipo": "Placa de video",
+        "version": "Nvidia 1660 Super",
+        "precio": 110000,
+        "img": "img/nvidia-1660.webp"
+    },
+    {
+        "id": 3,
+        "tipo": "Placa de video",
+        "version": "AMD 5600 XT",
+        "precio": 90000,
+        "img": "img/amd-5600xt.webp"
+    },
+    {
+        "id": 4,
+        "tipo": "Placa de video",
+        "version": "AMD 6500 XT",
+        "precio": 130000,
+        "img": "img/amd-5600xt.webp"
+    },
+    {
+        "id": 5,
+        "tipo": "Placa de video",
+        "version": "NVIDIA 3080",
+        "precio": 300000,
+        "img": "img/nvidia-3090.webp"
+    },
+    {
+        "id": 6,
+        "tipo": "Placa de video",
+        "version": "AMD 6700 XT",
+        "precio": 190000,
+        "img": "img/amd-6700xt.webp"
+    },
+    {
+        "id": 7,
+        "tipo": "Procesador",
+        "version": "Intel Core I7 10 Gen",
+        "precio": 79999,
+        "img": "img/i7-10700.webp"
+    },
+    {
+        "id": 8,
+        "tipo": "Procesador",
+        "version": "Ryzen 5 5600g",
+        "precio": 110000,
+        "img": "img/ryzen5-5600g.webp"
+    },
+    {
+        "id": 9,
+        "tipo": "Procesador",
+        "version": "Ryzen 5 3600",
+        "precio": 65000,
+        "img": "img/ryzen5-3600.webp"
+    },
+    {
+        "id": 10,
+        "tipo": "Memoria Ram",
+        "version": "Corsair 16 Gb",
+        "precio": 20000,
+        "img": "img/ram-corsair-16gb.webp"
+    },
+    {
+        "id": 11,
+        "tipo": "Memoria Ram",
+        "version": "Kingston 8gb",
+        "precio": 11000,
+        "img": "img/ram-kingston-8gb.webp"
+    },
+    {
+        "id": 12,
+        "tipo": "Memoria Ram",
+        "version": "Spectrix 32GB",
+        "precio": 35000,
+        "img": "img/ram-spectrix-32gb.webp"
+    }
+]
