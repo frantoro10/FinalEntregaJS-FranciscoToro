@@ -66,17 +66,17 @@
 /* Modal carrito */
 
 .modal-content {
-    position: fixed;
-    top: 50% !important;
-    left: 100% !important;
+    
     width: 60% !important;
 }
 #idModalCarrito {
-    
+    position: absolute;
+    left: 45%;
 }
 
 .carrito-img {
-    width: 100% !important;
+    width: 85% !important;
+    height: 9em;
 }
 
 .cardCarrito {
