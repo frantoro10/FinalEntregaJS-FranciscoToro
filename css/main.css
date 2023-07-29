@@ -68,7 +68,7 @@
 .modal-content {
     position: fixed;
     top: 50% !important;
-    left: 200% !important;
+    left: 100% !important;
     width: 60% !important;
 }
 #idModalCarrito {
